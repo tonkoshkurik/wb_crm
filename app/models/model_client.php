@@ -67,7 +67,13 @@ class Model_Client extends Model {
 // начало функционала для клиентов на стороне агенства
 	public function clientinfo()
   {
-    $id = $_GET['id'];
+    if(isset($_GET['id'])){
+        $id = $_GET['id'];
+        session_start();
+        $_SESSION['client_id'] = $id;
+    }elseif(!isset($_GET['id']) && isset($_SESSION['client_id'])){
+        $id = $_SESSION['client_id'];
+    }
     $sql = "SELECT * FROM `clients`";
     $sql .="WHERE id='$id'";
     $con = $this->db();
@@ -75,9 +81,24 @@ class Model_Client extends Model {
 
     $inf = $res->fetch_assoc();
 
-    return $inf;
+     return $inf;
    
   }
+
+    public function gmetrix(){
+        session_start();
+        $agency_id = $_SESSION['user_id'];
+        $client_id = $_SESSION['client_id'];
+
+        $sql = ' SELECT *';
+        $sql.= " FROM gmetrix";
+        $sql.= " WHERE (agency_id = '$agency_id') AND (client_id = '$client_id')";
+        $con = $this->db();
+        $res = $con->query($sql);
+        $gmetrix = $res->fetch_assoc();
+
+        return $gmetrix;
+    }
 
   public function updateclient()
   {
@@ -120,10 +141,7 @@ class Model_Client extends Model {
   {
     $id = $_POST['id'];
     // $val = $_POST['val'];
-    $uploaddir = 'images/';
-    $uploadfile = $uploaddir . basename($_FILES['userfile']['name']);
-    move_uploaded_file($_FILES['userfile']['tmp_name'], $uploadfile);
-    $img = 'images/'.$_FILES['userfile']['name'];
+    $img = optlogotype();
 
 
     $sql = "UPDATE `clients`";
@@ -173,19 +191,16 @@ class Model_Client extends Model {
     public function updateimgclient()
   {
     session_start();
-
     $id = $_SESSION['user_id'];
     // $val = $_POST['val'];
-    $uploaddir = 'images/';
-    $uploadfile = $uploaddir . basename($_FILES['image']['name']);
-    move_uploaded_file($_FILES['image']['tmp_name'], $uploadfile);
-    $img = 'images/'.$_FILES['image']['name'];
+    $img = optlogotype();
 
     $sql = "UPDATE `clients`";
     $sql.= " SET img='$img'";
     $sql.= " WHERE id_user='$id'";
     $con = $this->db();
     $res = $con->query($sql);
+
     if($res){
         return 'Success';
     }else{
@@ -204,6 +219,267 @@ class Model_Client extends Model {
     $analitics2 = 'Google Analitics2';
     return $analitics2;
   }
+    /**
+     * Gmetrix ajax update Url
+     **/
+    public function gmetrixUpdateUrl(){
+        $agency_id = $_SESSION['user_id'];
+        $client_id = $_SESSION['client_id'];
+        $url = $_POST['url'];
+        echo ($url);
+
+        $sql = ' SELECT *';
+        $sql.= " FROM gmetrix";
+        $sql.=" WHERE (agency_id = '$agency_id') AND (client_id = '$client_id')";
+        $con = $this->db();
+        $res = $con->query($sql);
+        $inf = $res->fetch_assoc();
+        if($inf){
+            $sql = "UPDATE gmetrix";
+            $sql.= " SET url='$url', page_load_time='', html_bytes='', page_elements='', report_url='', html_load_time='', page_bytes='', pagespeed_score='', 	yslow_score=''";
+            $sql.= " WHERE (agency_id = '$agency_id') AND (client_id = '$client_id')";
+            $con = $this->db();
+            $res = $con->query($sql);
+            echo("UPDATE");
+        } else {
+            $sql = "INSERT INTO gmetrix(agency_id, client_id, url) 
+                    VALUES ('$agency_id', '$client_id', '$url')";
+            $res = $con->query($sql);
+            echo('Insert');
+        }
+    }
+
+    /**
+     * Search Console update Site
+     **/
+    public function searchConsoleUpdateSite()
+    {
+        $agency_id = $_SESSION['user_id'];
+        $client_id = $_SESSION['client_id'];
+        $site = $_POST['site'];
+        echo ($site);
+
+        $sql = ' SELECT *';
+        $sql.= " FROM client_api";
+        $sql.=" WHERE (agency_id = '$agency_id') AND (client_id = '$client_id') AND (api_name = 'search_console')";
+        $con = $this->db();
+        $res = $con->query($sql);
+        $inf = $res->fetch_assoc();
+        if($inf){
+            $sql = "UPDATE client_api";
+            $sql.= " SET api_profile_id='$site'";
+            $sql.= " WHERE (agency_id = '$agency_id') AND (client_id = '$client_id') AND (api_name = 'search_console')";
+            $con = $this->db();
+            $res = $con->query($sql);
+            echo("UPDATE");
+        } else {
+            $sql = "INSERT INTO client_api(agency_id, client_id, api_name, 	api_profile_id) 
+                    VALUES ('$agency_id', '$client_id', 'search_console', '$site')";
+            $res = $con->query($sql);
+            echo('Insert');
+        }
+    }
+
+  /**
+   * Search Console
+   **/
+    private $client;
+
+    function __construct($client) {
+        $this->client = $client;
+    }
+
+    public function searchconsole() {
+
+        if (!$oauth_credentials = $this->getOAuthCredentialsFile()) {
+            echo $this->missingOAuth2CredentialsWarning();
+            return;
+        }
+        if (!headers_sent()) {
+            session_start();
+        }
+
+        $redirect_uri = 'http://' . $_SERVER['HTTP_HOST'] . '/client/clientinfo';
+
+        $client = $this->client;
+        $client->setAuthConfig($oauth_credentials);
+        $client->setRedirectUri($redirect_uri);
+        $client->addScope("https://www.googleapis.com/auth/webmasters");
+        $agency_id = $_SESSION['user_id'];
+        $client_id = $_SESSION['client_id'];
+
+
+        // add "?logout" to the URL to remove a token from the session
+        if (isset($_REQUEST['logout'])) {
+            unset($_SESSION['search-console-token']);
+            $access_token_json='';
+            $this->updateAccessTokenDB($agency_id, $client_id, $access_token_json);
+        }
+
+        if (isset($_GET['code'])) {
+            $client->authenticate($_GET['code']);
+            $access_token = $client->getAccessToken();
+            //$_SESSION['search-console-token'] = $access_token;
+            $access_token_json = json_encode($access_token);
+            $res = $this->getCurrentSearchConsoleConnection($agency_id, $client_id);
+            if($res){
+                $this->updateAccessTokenDB($agency_id, $client_id, $access_token_json);
+            }else{
+                $this->storeAccessTokenDB($agency_id, $client_id, $access_token_json);
+            }
+
+            // redirect back to the index controller
+            header('Location: ' . filter_var($redirect_uri, FILTER_SANITIZE_URL));
+        }
+
+        $accessTokenDB = $this->getAccessTokenDB($agency_id, $client_id);
+        $accessTokenDB = json_decode($accessTokenDB);
+        $accessTokenDB = get_object_vars($accessTokenDB);
+//        echo('<pre>');
+//        var_dump($accessTokenDB);
+//        var_dump($_SESSION['search-console-token']);
+//        die();
+
+        // set the access token as part of the client
+        if ($accessTokenDB) {
+            $client->setAccessToken($accessTokenDB);
+            if ($client->isAccessTokenExpired()) {
+
+                header('Location: '.$client->createAuthUrl());
+				die();
+            }
+        } else {
+            $data["authUrl"] = $client->createAuthUrl();
+        }
+
+        /************************************************
+        We are going to create Search Console Service.
+         ************************************************/
+
+        $search_service = new Google_Service_Webmasters($client);
+
+        /************************************************
+        If we're signed in, retrieve list if websites from Search Console
+         ************************************************/
+        if ($client->getAccessToken()) {
+            //$_SESSION['search-console-token'] = $client->getAccessToken();
+            $accessToken = $client->getAccessToken();
+            //TEST MODE
+            $access_token_json = json_encode($accessToken);
+//                var_dump($access_token_json);
+//                die();
+            $this->updateAccessTokenDB($agency_id, $client_id, $access_token_json);
+            $sitesResp = $search_service->sites->listSites();
+            foreach ($sitesResp as $site){
+                if($site['permissionLevel'] == 'siteOwner'){
+                    $sites[] = $site['siteUrl'];
+                }
+            }
+            $data["sites"] = $sites;
+
+            $res = $this->getCurrentSearchConsoleConnection($agency_id, $client_id);
+            $data['cur_site'] = $res['api_profile_id'];
+        }
+        return $data;
+    }
+
+
+    private function missingOAuth2CredentialsWarning()
+    {
+        $ret = "
+    <h3 class='warn'>
+      Warning: You need to set the location of your OAuth2 Client Credentials from the
+      <a href='http://developers.google.com/console'>Google API console</a>.
+    </h3>
+    <p>
+      Once downloaded, move them into the credentials directory of this appclication and
+      rename them 'oauth-credentials.json'.
+    </p>";
+
+        return $ret;
+    }
+
+    private function getOAuthCredentialsFile()
+    {
+        // oauth2 creds
+        $oauth_creds = __DIR__ . '/../../credentials/oauth-credentials.json';
+
+        if (file_exists($oauth_creds)) {
+            return $oauth_creds;
+        }
+
+        return false;
+    }
+
+    private function getCurrentSearchConsoleConnection($agency_id, $client_id){
+        $sql = "SELECT * FROM client_api";
+        $sql .= " WHERE (agency_id = '$agency_id') AND (client_id = '$client_id') AND (api_name = \"search_console\")";
+        $con = $this->db();
+        $res = $con->query($sql);
+        $data = $res->fetch_assoc();
+        return $data;
+    }
+
+    private function updateAccessTokenDB($agency_id, $client_id, $access_token_json){
+        $sql = "UPDATE client_api";
+        $sql.= " SET access_token='$access_token_json'";
+        $sql.= " WHERE (agency_id = '$agency_id') AND (client_id = '$client_id') AND (api_name = \"search_console\")";
+        $con = $this->db();
+        $res = $con->query($sql);
+
+        return $res;
+    }
+
+    private function storeAccessTokenDB($agency_id, $client_id, $access_token_json){
+        $sql = "INSERT INTO client_api(agency_id, client_id, api_name, access_token) 
+                    VALUES ('$agency_id', '$client_id', 'search_console', '$access_token_json')";
+        $con = $this->db();
+        $res = $con->query($sql);
+
+        return($res);
+    }
+
+    private function getAccessTokenDB($agency_id, $client_id){
+        $sql = "SELECT * FROM client_api";
+        $sql .= " WHERE (agency_id = '$agency_id') AND (client_id = '$client_id') AND (api_name = \"search_console\")";
+        $con = $this->db();
+        $res = $con->query($sql);
+
+        $data = $res->fetch_assoc();
+
+
+        return $data['access_token'];
+    }
+
+    public function getid()
+    {
+        $id = $_GET['id'];
+        $sql = "SELECT * FROM `clients`";
+        $sql .= "WHERE id=$id";
+        $con = $this->db();
+        $result = $con->query($sql);
+        $res = $result->fetch_assoc();
+
+        return $res;
+    }
+
+    public function infagency()
+    {
+    session_start();
+
+    $id = $_SESSION['user_id'];
+    $sql = "SELECT * FROM `agency`";
+    $sql .="WHERE id='$id'";
+    $con = $this->db();
+    $res = $con->query($sql);
+   
+    if($res->num_rows>0){
+        return $info = $res->fetch_assoc();
+    }else{
+      return 'null';
+        }
+    }
+
 
 
 	

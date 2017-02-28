@@ -2,12 +2,41 @@
 class Controller_Client extends Controller
 {
   function __construct() {
-    $this->model = new Model_Client();
-    $this->view = new View();
+      require_once("vendor/autoload.php");
+      $client = new Google_Client();
+      $this->model = new Model_Client($client);
+      $this->view = new View();
+
+
+
+      /**
+       * Check user role
+       */
+      require_once 'app/models/model_login.php';
+      $user = new Model_Login();
+      $role = $user->check_user_role();
+          $page = $_SERVER['REQUEST_URI'];
+      $page = explode("?", $page);
+      // var_dump($_SESSION);
+      // exit();
+      if($page[0] == '/client/linkgeneral' || $page[0] == '/client/linkchannels' || $page[0] == '/client/linkconversions' || $page[0] == '/client/linkpdf' || $page[0] == '/client/linksearch' || $page[0] == '/client/linkgmetrix'){
+        $res = $this->model->getid();
+        // var_dump($res);
+        session_start();
+        $_SESSION['user_id'] = $res['id_user'];
+        $_SESSION['client_id'] = $_GET['id'];
+        $role['level'] = 2;
+      }
+
+      if ($role['level'] > 3 || $role['level'] < 1){
+          $this->view->generate('danied_view.php', 'template_view.php');
+          die();
+      }
+
   }
 
   function action_index() {
-    return $this->action_dashboard();
+        return $this->action_dashboard();
   }
 
   
@@ -18,11 +47,11 @@ class Controller_Client extends Controller
     $data['inf'] = $this->model->getinform();
       // $this->view->generate('dashboard_view.php', 'template_user_view.php', $data);
     if ($_SESSION['user'] == md5('user')) {
-        $this->view->generate('dashboard_client_view.php', 'template_view.php', $data);
+        $this->view->generate('client/dashboard_client_view.php', 'client/client_template_view.php', $data);
       // $this->view->generate('client_dashboard_view.php', 'client_template_view.php', $data);
     } else {
       session_destroy();
-      $this->view->generate('danied_view.php', 'template_view.php', $data);
+      $this->view->generate('danied_view.php', 'client/client_template_view.php', $data);
     }
   }
 
@@ -40,10 +69,10 @@ class Controller_Client extends Controller
     $data["title"] = "Client Profile";
     $data["profile"] = $this->model->get_profile();
     if ($_SESSION['user'] == md5('user')) {
-      $this->view->generate('profile_view.php', 'template_user_view.php', $data);
+      $this->view->generate('client/profile_view.php', 'template_user_view.php', $data);
     } else {
       session_destroy();
-      $this->view->generate('danied_view.php', 'template_view.php', $data);
+      $this->view->generate('danied_view.php', 'client/client_template_view.php', $data);
     }
 
   }
@@ -72,12 +101,11 @@ class Controller_Client extends Controller
     $data['analitics'] = $this->model->analitics();
     $data['inf'] = $this->model->getinform();
       // $this->view->generate('dashboard_view.php', 'template_user_view.php', $data);
-    if ($_SESSION['user'] == md5('user')) {
-        $this->view->generate('analitics.php', 'template_view.php', $data);
-      // $this->view->generate('client_dashboard_view.php', 'client_template_view.php', $data);
+    if ($_SESSION['user'] == md5('user')){
+      $this->view->generate('client_dashboard_view.php', 'agency/agency_client_template_view.php', $data);
     } else {
       session_destroy();
-      $this->view->generate('danied_view.php', 'template_view.php', $data);
+      $this->view->generate('danied_view.php', 'agency/agency_client_template_view.php', $data);
     }
 }
 
@@ -90,44 +118,84 @@ public function action_analitics2()
     $data['inf'] = $this->model->getinform();
       // $this->view->generate('dashboard_view.php', 'template_user_view.php', $data);
     if ($_SESSION['user'] == md5('user')) {
-        $this->view->generate('analitics2.php', 'template_view.php', $data);
+        $this->view->generate('analitics2.php', 'agency/agency_client_template_view.php', $data);
     } else {
       session_destroy();
-      $this->view->generate('danied_view.php', 'template_view.php', $data);
+      $this->view->generate('danied_view.php', 'agency/agency_client_template_view.php', $data);
     }
 }
 
  function action_clientinfo()
   {
-    $res = $this->model->clientinfo();
-    $data['inf'] = $res;
-    $result = $this->model->prof();
-    $data['info'] = $result;
-    // var_dump($data);
-    // exit();
-    $this->view->generate('edit_clients_view.php', 'template_view.php', $data);
+        $results = $this->model->infagency();
+        $data['inform'] = $results;
+        $res = $this->model->clientinfo();
+        $data['inf'] = $res;
+        $result = $this->model->prof();
+        $data['info'] = $result;
+        $data['searchconsole'] = $this->model->searchconsole();
+        $data['gmetrix'] = $this->model->gmetrix();
+        $this->view->generate('agency/edit_clients_view.php', 'agency/agency_client_template_view.php', $data);
     
   }
 
   function action_clientanalytics()
     {
         require_once 'app/models/model_ajax.php';
+        $result = $this->model->prof();
+        $data['info'] = $result;
+        $res = $this->model->clientinfo();
+        $data['inf'] = $res;
+        $results = $this->model->infagency();
+        $data['inform'] = $results;
         $this->model = new Model_Ajax();
         $api_profile_id = $this->model->get_api_profile_id();
-        $this->view->generate('clients_analytics_view.php', 'template_view.php', $api_profile_id);
+        $data['api_profile_id'] = $api_profile_id;
+        $this->view->generate('client/clients_analytics_view.php', 'agency/agency_client_template_view.php', $data);
+
+    }
+    function action_clientanalyticschannels()
+    {
+        require_once 'app/models/model_ajax.php';
+        $result = $this->model->prof();
+        $data['info'] = $result;
+        $res = $this->model->clientinfo();
+        $data['inf'] = $res;
+        $results = $this->model->infagency();
+        $data['inform'] = $results;
+        $this->model = new Model_Ajax();
+        $api_profile_id = $this->model->get_api_profile_id();
+        $this->view->generate('client/clients_analytics1_view.php', 'agency/agency_client_template_view.php', $data);
+
+    }
+    function action_clientanalyticsconversions()
+    {
+        require_once 'app/models/model_ajax.php';
+        $result = $this->model->prof();
+        $data['info'] = $result;
+        $res = $this->model->clientinfo();
+        $data['inf'] = $res;
+        $results = $this->model->infagency();
+        $data['inform'] = $results;
+        $this->model = new Model_Ajax();
+        $api_profile_id = $this->model->get_api_profile_id();
+        $this->view->generate('client/clients_analytics2_view.php', 'agency/agency_client_template_view.php', $data);
 
     }
 
-    function action_clientanalyticspdf()
+    public function action_clientanalyticspdf()
     {
-//        require_once 'app/models/model_ajax.php';
-//        $this->model = new Model_Ajax();
-//        $api_profile_id = $this->model->get_api_profile_id();
+        require_once 'app/models/model_agency.php';
+        $agency = new Model_Agency();
+        $data['info'] = $agency->infagency();
         $res = $this->model->clientinfo();
         $data['client_info'] = $res;
-//        $data = '1234';
-        $this->view->generate('clients_analytics_pdf_view.php', 'template_view.php', $data);
-//        $this->view->generate('clients_analytics_pdf_view.php', 'template_view.php', $api_profile_id);
+        $results = $this->model->infagency();
+        $data['inform'] = $results;
+        $result = $this->model->clientinfo();
+        $data['inf'] = $result;
+        $this->view->generate('client/clients_analytics_pdf_view.php', 'agency/agency_client_template_view.php', $data);
+
 
     }
 
@@ -146,7 +214,7 @@ public function action_analitics2()
 
     public function action_api(){
         $data = '';
-        $this->view->generate('api_view.php', 'template_view.php', $data);
+        $this->view->generate('api_view.php', 'client/client_template_view.php', $data);
     }
 
     public function action_view_only_mode(){
@@ -155,26 +223,137 @@ public function action_analitics2()
         $this->view->generate('view_only_mode_view.php', 'template_view.php', $data);
     }
 
-    public function action_gtmetrix(){
-//        require_once str_replace('\\', '/', _MAIN_DOC_ROOT_.'/app/libs/gmetrix1.php');
-//        gmetrix_view.php
+    public function action_gmetrix(){
         require_once str_replace('\\', '/', _MAIN_DOC_ROOT_.'/app/models/model_gmetrix.php');
         $gmetrix = new Model_Gmetrix();
 
-        if ($_POST['gmetrix_url']){
+        if (isset($_POST['gmetrix_url']) && !empty($_POST['gmetrix_url'])){
             $gmetrix->url_to_test = $_POST['gmetrix_url'];
             $gmetrix->run();
             $data['test_result'] = $gmetrix->data;
 
         }
 
+        require_once 'app/models/model_agency.php';
+        $agency = new Model_Agency();
+        $data['info'] = $agency->infagency();
+
         $res = $this->model->clientinfo();
+//        $gmetrix->api_key = '0ba16a2ff188de3452f530d712963b96';
         $data['api_key'] = $gmetrix->api_key;
+//        $gmetrix->account_email = 'sergiy.zub@jointoit.com';
         $data['acount_email'] = $gmetrix->account_email;
+
+        /*-----------------*/
+
+        $gmetrix->url_to_test = 'http://jointoit.com/';
+        $data['test_result'] = $gmetrix->data;
+
+        /*-----------------*/
         $data['client_info'] = $res;
         if ($client_id = $_GET['id']) $data['saved_tests'] = $gmetrix->get_client_tests_by_client_id($client_id);
         $this->view->generate('gmetrix_view.php', 'template_view.php', $data);
     }
+
+    public function action_searchConsoleUpdateSite(){
+        echo $this->model->searchConsoleUpdateSite();
+    }
+
+    public function action_gmetrixUpdateUrl(){
+        echo $this->model->gmetrixUpdateUrl();
+    }
+
+    public function action_onlymode()
+    {
+
+      $res = $this->model->clientinfo();
+      $data['inf'] = $res;
+      $this->view->generate('client/client_link_view.php', 'agency/agency_client_template_view.php', $data);
+    }
+
+    public function action_linkgeneral()
+    {
+
+        require_once 'app/models/model_ajax.php';
+        $result = $this->model->prof();
+        $data['info'] = $result;
+        $res = $this->model->clientinfo();
+        $data['inf'] = $res;
+        $this->model = new Model_Ajax();
+        $api_profile_id = $this->model->get_api_profile_id();
+        $data['api_profile_id'] = $api_profile_id;
+        $this->view->generate('client/client_general_view.php', 'link_template_view.php', $data);
+    }
+
+    public function action_linkchannels()
+    {
+        require_once 'app/models/model_ajax.php';
+        $result = $this->model->prof();
+        $data['info'] = $result;
+        $res = $this->model->clientinfo();
+        $data['inf'] = $res;
+        $this->model = new Model_Ajax();
+        $api_profile_id = $this->model->get_api_profile_id();
+        $this->view->generate('client/client_channels_view.php', 'link_template_view.php', $data);       
+    }
+
+    public function action_linkconversions()
+    {
+        require_once 'app/models/model_ajax.php';
+        $result = $this->model->prof();
+        $data['info'] = $result;
+        $res = $this->model->clientinfo();
+        $data['inf'] = $res;
+        $this->model = new Model_Ajax();
+        $api_profile_id = $this->model->get_api_profile_id();
+        $this->view->generate('client/client_conversion_view.php', 'link_template_view.php', $data);       
+        
+    }
+
+    public function action_linkpdf()
+    {
+        require_once 'app/models/model_agency.php';
+        $agency = new Model_Agency();
+        $data['info'] = $agency->infagency();
+        $res = $this->model->clientinfo();
+        $data['client_info'] = $res;
+        $result = $this->model->clientinfo();
+        $data['inf'] = $result;
+        $this->view->generate('client/client_pdf_view.php', 'link_template_view.php', $data);       
+
+    }
+
+    public function action_linksearch()
+    {
+     echo "777";
+     die();
+      $res = $this->model->clientinfo();
+      
+      $data['inf'] = $res;
+
+      require_once("vendor/autoload.php");
+      require_once 'app/models/model_link.php';
+      $client = new Google_Client();
+      $client->getRefreshToken();
+      $this->model = new Model_Link($client);
+      $this->view = new View();
+
+      $data = $this->model->searchconsole();
+  
+      $this->view->generate('client/client_search_view.php', 'link_template_view.php', $data);
+    }
+
+    public function action_linkgmetrix()
+    {
+        require_once('app/models/model_gmetrixnew.php');
+        $this->model = new Model_Gmetrixnew();
+        $this->view = new View();
+        $data = $this->model->gmetrix();
+        $result = $this->model->clientinfo();
+        $data['inf'] = $result;
+        $this->view->generate('client/client_gmetrix_view.php', 'link_template_view.php', $data);
+    }
+
 
 
 }

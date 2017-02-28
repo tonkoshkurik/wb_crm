@@ -1,269 +1,3 @@
-<style type="text/css">
- .round {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    border: 3px solid #e5dee5;
-   }
-
-    .sign {
-    float: left; /* Выравнивание по правому краю */
-    padding: 7px; /* Поля внутри блока */
-    margin: 10px 0 5px 5px; /* Отступы вокруг */
-   }
-
-   .name_position{
-    text-align: center;
-   }
-
-   *{
-    padding: 0;
-    margin: 0;
-}
-
-.home-active{
-    width: 300px;
-    height: 300px;   
-    position: relative;
-    text-align: center;
-    margin: 0 auto;
-}
-.home-active img{
-    width: 300px;
-    height: 300px;     
-}
- 
-.block-hidden{    
-    display: none;
-}
-
-.home-active:hover .block-hidden{
-    width: 100%;
-    height: 100%;
-    display: block;
-    position: absolute; top: 0; left: 0;
-    background: rgba(0,0,0,0.7);
-    color: #fff;
-}
-.block-hidden h2{
-    position: absolute; top: 5%; left: 5%;    
-}
-.block-hidden .read-more{
-    margin-top: 50%;
-    text-align: center;
-    cursor: pointer;
-    /*text-overflow: clip;*/
-     /*bottom: 5%; right: 5%;    */
-}
-.block-hidden .read-more a{
-    color: #fff;    
-}
-
-ul.integrations-list{
-    margin:0;
-    padding:0;
-    list-style:none;
-}
- ul.integrations-list li{
-     margin:0;
-     padding:20px 40px;
-     /*background: #f8f8f8;*/
-     border-top:1px solid #dddddd;
- }
- ul.integrations-list li:first-child{
-     border-top:none;
- }
-.google-analitics-logo, .google-console-logo{
-    position:relative;
-}
-.google-analitics-logo::before,
-.google-console-logo::before{
-    content:'';
-    position:absolute;
-    top:50%;
-    margin-top:-13px;
-    left:0px;
-    width:25px;
-    height:25px;
-
-}
- .google-analitics-logo::before{
-     background: url(/images/google-analytics-logo.png) no-repeat;
-     background-size:cover;
- }
-.google-console-logo::before{
-    left:1px;
-    background: url(/images/googleWebmasterToolsIcon.svg) no-repeat;
-    background-size:cover;
-}
-.connect{
-    display:block;
-    float:right;
-    padding:3px 7px;
-    background: #2985cc;
-    border:1px solid:#2985cc;
-    border-radius:7px;
-    color:#fff;
-    font-size:0.8em;
-
-    cursor:pointer;
-}
- .connect:hover{
-     background: #1f6499;
- }
- .disconnect{
-     display:block;
-     display:none;
-     float:right;
-     padding:3px 7px;
-     background: #ff3a33;
-     border:1px solid:#2985cc;
-     border-radius:7px;
-     color: #fff;
-     font-size:0.8em;
-     cursor:pointer;
- }
- .disconnect:hover{
-     background: #f00;
- }
- .analytics-connection-container{
-     display:none;
- }
-</style>
-<body class="nav-md">
-<script src="<?=__HOST__?>/vendors/jquery/dist/jquery.min.js"></script>
-    <div class="container body">
-      <div class="main_container">
-        <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="/agency/dashboard" class="site_title"><i class="fa fa-paw"></i> <span>Jointoit!</span></a>
-            </div>
-
-            <div class="clearfix"></div>
-
-            <!-- menu profile quick info -->
-       <!--      <div class="profile clearfix">
-              <div class="profile_pic">
-                <img src="<?php echo $host.'/'.$data['inf']['img']?>" alt="..." class="img-circle profile_img">
-              </div>
-              <div class="profile_info">
-                <span>Welcome,</span>
-                <h2>Artur</h2>
-                 <a href="/agency/infagency">Profile</a>
-              </div>
-            </div> -->
-            <!-- /menu profile quick info -->
-
-            <br />
-
-            <!-- sidebar menu -->
-            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              <div class="menu_section">
-                <h3>General</h3>
-                <ul class="nav side-menu">
-                <!--   <li><a><i class="fa fa-home"></i> Clients <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="#" class="edit-client" data-toggle="modal" class="edit-button" data-target="#client" >Add new clients</a></li>
-                      <li><a href="/agency/allclients">List of clients</a></li>
-                    </ul>
-                  </li> -->
-                  <li><a><i class="fa fa-edit"></i> Setting <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="#">Setting Form 1</a></li>
-                      <li><a href="#">Setting Form 2</a></li>
-                      <li><a href="#">Setting Form 3</a></li>
-                      <li><a href="#">Setting Form 4</a></li>
-                      <li><a href="#">Setting Form 5</a></li>
-                      <!-- <li><a href="form_buttons.html">Form Buttons</a></li> -->
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-desktop"></i> Reports <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="/client/clientanalytics?id=<?=$_GET['id'] ?>">Reports 1</a></li>
-                        <li><a href="/client/clientanalyticspdf?id=<?=$_GET['id'] ?>">Reports 1 PDF</a></li>
-                      <li><a href="/searchconsole/searchconsole">Search console</a></li>
-                      <li><a href="#">Reports 4</a></li>
-                      <li><a href="#">Reports 5</a></li>
-                      <li><a href="#">Reports 6</a></li>
-                      <li><a href="#">Reports 7</a></li>
- <!--                      <li><a href="inbox.html">Inbox</a></li>
-                      <li><a href="calendar.html">Calendar</a></li> -->
-                    </ul>
-                  </li>
-             
-                </ul>
-              </div>
-       
-
-            </div>
-            <!-- /sidebar menu -->
-
-            <!-- /menu footer buttons -->
-            <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
-            </div>
-            <!-- /menu footer buttons -->
-          </div>
-        </div>
-
-        <!-- top navigation -->
-        <div class="top_nav">
-          <div class="nav_menu">
-            <nav>
-              <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-              </div>
-
-              <ul class="nav navbar-nav navbar-right">
-
-                <li class="">
-                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="<?php echo $host.'/'.$data['info']['imglogo']?>" alt=""><?php echo $data['info']['name_agency'];?>
-                    <span class=" fa fa-angle-down"></span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="<?php echo $host.'/agency/infagency'?>"> Profile</a></li>
-                  <!--   <li>
-                      <a href="javascript:;">
-                        <span class="badge bg-red pull-right">50%</span>
-                        <span>Settings</span>
-                      </a>
-                    </li> -->
-                    <!-- <li><a href="javascript:;">Help</a></li> -->
-                    <li><a href="<?php echo $host.'/'.'index/logout'; ?>"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                  </ul>
-                </li>
-
-                <li>
-                    <a href="#" class="edit-client" data-toggle="modal" class="edit-button" data-target="#client" >
-                      <!-- <span class="badge bg-red pull-right">50%</span> -->
-                      <span>Add new client</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?php echo $host.'/'.'agency/dashboard'; ?>">
-                      <!-- <span class="badge bg-red pull-right">50%</span> -->
-                      <span>All clients</span>
-                    </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-        <!-- /top navigation -->
-
         <!-- page content -->
 <div class="right_col" role="main">
 
@@ -276,14 +10,9 @@ ul.integrations-list{
 
         <div id="client" class="tab-pane fade in active">
             <h2>Client</h2>
-            <!--    <input type='hidden' name='id_client' value=''/>
-            <div class='form-group'>
-              <label>Name</label>
-              <input class="form-control" type="text" value="" name="name" >
-            </div> -->
             <div class="col-md-4">
                 <div class="home-active">
-                    <img src="<?php echo $host.'/'.$data['inf']['img']?>" style="width:304px;height:228px;" alt="Mountain View" >
+                    <img src="<?php echo $host.'/'.$data['inf']['img']?>" class="logoclient" alt="Mountain View" >
                     <div class="block-hidden">
                         <div data-toggle="modal" data-target="#editimg" class="read-more">Edit image</div>
                     </div>
@@ -312,7 +41,6 @@ ul.integrations-list{
                     <tr>
                         <th>Notes: </th><td><?php echo $data['inf']['notes']?></td>
                     </tr>
-                    <!-- <a href="#" class="edit-client" data-toggle="modal" class="edit-button" data-target="#edit" >Edit</a> -->
                 </table>
                 <div style="position:relative;top:20px;">
                     <button style="margin-top:-35px;" type="submit" name="id" value="<?php echo $data['inf']['id']?>" data-toggle="modal" data-target="#edit" class="btn btn-primary">Edit</button>
@@ -332,7 +60,7 @@ ul.integrations-list{
                             <div class="modal-body">
                                 <input type="hidden" class="form-control" name="id" value="<?php echo $data['inf']['id']?>" />
                                 <div class='form-group'>
-                                    <input type="file" class="form-control" name="userfile" required />
+                                    <input type="file" class="form-control" name="image" required />
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-default" data-dismiss="modal">Closed</button>
@@ -407,7 +135,7 @@ ul.integrations-list{
             <h2>Edit Integrations</h2>
 
             <form action="" method="post" id="form">
-                <input type="hidden" name="client_id" placeholder="client_id" id="client_id" value="<?=$_GET['id'] ?>">
+                <input type="hidden" name="client_id" placeholder="client_id" id="client_id" value="<?=$_SESSION['client_id']; ?>">
                 <input type="hidden" name="api_name" placeholder="api_name" id="api_name" value="api_analitics">
                 <input type="hidden" name="api_profile_id" placeholder="api_profile_id" id="api_profile_id">
             </form>
@@ -429,7 +157,7 @@ ul.integrations-list{
                 <div class="analytics-connection-container">
 
                     <form action="" method="post" id="form">
-                        <input type="hidden" name="client_id" placeholder="client_id" id="client_id" value="<?=$_GET['id'] ?>">
+                        <input type="hidden" name="client_id" placeholder="client_id" id="client_id" value="<?=$_SESSION['client_id']; ?>">
                         <input type="hidden" name="api_name" placeholder="api_name" id="api_name" value="api_analitics">
                     </form>
 
@@ -568,10 +296,101 @@ ul.integrations-list{
                     });
                 </script>
 
-                <li class="google-console-logo">Google Search Console <span class="connect">CONNECT</span></li>
+                <li class="google-console-logo">
+                    Google Search Console
+                    <?php if (isset($data['searchconsole']['authUrl'])): ?>
+                        <span class="connect">
+                            <a href="<?= $data['searchconsole']['authUrl'] ?>">CONNECT</a>
+                        </span>
+                    <?php else:?>
+                        <!--<span class="connect" style="display:block;">
+                           <a href="?logout">RECONNECT</a>
+                        </span>-->
+                    <?php endif; ?>
+                </li>
+                <?php if (!isset($data['searchconsole']['authUrl'])): ?>
+                    <div id="search-console-connection">
+                        <h5>Choose the site to connect Seaarch Console</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <select id="select-search-console" class="FormField form-control">
+                                    <?php foreach ($data['searchconsole']['sites'] as $site): ?>
+                                        <option value="<?=($site)?>" <?php if(trim($site) == trim($data['searchconsole']['cur_site'])) echo ('selected');?> >
+                                            <?php echo($site);?>
+                                        </option>
+                                    <?php endforeach;?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        <?php if(!isset($data['searchconsole']['cur_site'])):  ?>
+                        $( document ).ready(function() {
+                            var site = $("#select-search-console").val();
+                            console.log(site);
+                            $.ajax({
+                                type: "POST",
+                                url: "/client/searchConsoleUpdateSite",
+                                data: 'site='+site
+                            }).done(function( msg ) {
+                                console.log(msg);
+                            });
+                        });
+                        <?php endif;?>
+
+                        $("#select-search-console").on('change', function() {
+                            var site = $("#select-search-console").val();
+                            console.log(site);
+                            $.ajax({
+                                type: "POST",
+                                url: "/client/searchConsoleUpdateSite",
+                                data: 'site='+site
+                            }).done(function( msg ) {
+                                console.log(msg);
+                            });
+                        });
+                    </script>
+                <?php endif; ?>
+                <li class="gmetrix-logo">
+                    Gmetrix
+                    <?php if($data['gmetrix']['url']):?>
+                        <i>(Connected:<strong>"<?=$data['gmetrix']['url']?>"</strong>)</i>
+                        <span class="connect" id="gmetrix-connect">RECONNECT</span>
+                    <?php else:?>
+                        <span class="connect" id="gmetrix-connect">CONNECT</span>
+                    <?php endif; ?>
+
+                </li>
+                <div id="gmetrix-connection">
+                    <h5>Enter the url of the site:</h5>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <input type="text" name="gmetrix_url" value="<?=$data['gmetrix']['url']?>" id="gmetrix_url" class="form-control">
+                            <button class="btn btn-primary" id="gmetrix_save" style="margin-top:10px;">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    $('#gmetrix-connect').on('click', function(){
+                        $('#gmetrix-connection').show();
+                        $('#gmetrix-connect').hide();
+                    });
+                    $('#gmetrix_save').on('click', function(){
+                        var gmetrix_url = $("#gmetrix_url").val();
+                        console.log(gmetrix_url);
+                        $.ajax({
+                            type: "POST",
+                            url: "/client/gmetrixUpdateUrl",
+                            data: 'url='+gmetrix_url
+                        }).done(function( msg ) {
+                            console.log(msg);
+                            $('#gmetrix-connection').hide();
+                            $('li.gmetrix-logo').append("(Connected:<strong>"+gmetrix_url+"</strong>)");
+                        });
+                    });
+                </script>
+
             </ul>
-
-
 
         </div>
 
@@ -581,8 +400,20 @@ ul.integrations-list{
 
     <br />
 
-</div>
-</div>
+     <div class="row">
+
+
+
+
+        <div class="col-md-4 col-sm-4 col-xs-12">
+
+
+
+            <!-- end of weather widget -->
+          </div>
+      </div>
+          </div>
+        </div>
         <!-- /page content -->
 
         <!-- footer content -->

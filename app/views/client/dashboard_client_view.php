@@ -32,36 +32,10 @@
               <div class="menu_section">
                 <h3>General</h3>
                 <ul class="nav side-menu">
-                 <!--  <li><a><i class="fa fa-user"></i> Profile <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="#" class="edit-client" data-toggle="modal" class="edit-button" data-target="#client" >Add new clients</a></li>
-                      <li><a href="index2.html">List of clients</a></li>
-                      <! <li><a href="index3.html">Dashboard3</a></li>
-                    </ul>
-                  </li> -->
-                  
-               <!--    <li><a><i class="fa fa-edit"></i> Setting <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="#">Setting Form 1</a></li>
-                      <li><a href="#">Setting Form 2</a></li>
-                      <li><a href="#">Setting Form 3</a></li>
-                      <li><a href="#">Setting Form 4</a></li>
-                      <li><a href="#">Setting Form 5</a></li>
-                      <! <li><a href="form_buttons.html">Form Buttons</a></li> -->
-                   <!--  </ul>
-                  </li>  -->
                   <li><a><i class="fa fa-desktop"></i> Analitics <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="<?php echo $host; ?>/client/analitics">Overview</a></li>
                       <li><a href="<?php echo $host; ?>/client/analitics2">Sessions</a></li>
-                     <!--  <li><a href="#">Reports 2</a></li>
-                      <li><a href="#">Reports 3</a></li>
-                      <li><a href="#">Reports 4</a></li>
-                      <li><a href="#">Reports 5</a></li>
-                      <li><a href="#">Reports 6</a></li>
-                      <li><a href="#">Reports 7</a></li> -->
- <!--                      <li><a href="inbox.html">Inbox</a></li>
-                      <li><a href="calendar.html">Calendar</a></li> -->
                     </ul>
                   </li>
                 </ul>
@@ -172,7 +146,7 @@
          <input type="hidden" class="form-control" name="id" value="<?php echo $data['inf']['id']?>" />
            <div class='form-group'>
                 <label for="uploadbtn" class="uploadButton">Update logo</label>
-                <input id="uploadbtn" type="file" class="form-control" style="opacity: 0; z-index: -1;" name="image"/>
+                <input id="uploadbtn" type="file" class="form-control" style="opacity: 0; z-index: -1;" name="image" required />
               </div>
            <div class="modal-footer">
              <button type="button" class="btn btn-default" data-dismiss="modal">Closed</button>

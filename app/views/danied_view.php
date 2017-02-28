@@ -1,1 +1,1 @@
-<h3>Access Denied! Please <a href='/login'>login</a></h3>
+<h3>Access Denied! Please <a href='/index/login'>login</a></h3>

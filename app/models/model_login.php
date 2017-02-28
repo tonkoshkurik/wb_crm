@@ -1,17 +1,15 @@
 <?php
 class Model_Login extends Model {
+
   public function get_data() {
     $loginUser = array(
       "login_status" => 1
     );
     return $loginUser;
   }
+
   public function check_data($login, $password) {
-    $con = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-    if ($con->connect_errno) {
-    printf("Connect failed: %s\n", $con->connect_error);
-      exit();
-    }
+    $con = $this->db();
     $data = array();
     $login = mysqli_real_escape_string($con, $login);
     $password = mysqli_real_escape_string($con, $password);
@@ -30,12 +28,15 @@ class Model_Login extends Model {
         $con->close();
         return FALSE;
       }
+
         setcookie("user_name", $data['full_name']);
         setcookie("user_id", $data["id"]);
+
     } else {
 
       $con->close();
       return FALSE;
+
     }
     $con->close();
     return $data;
@@ -55,14 +56,13 @@ class Model_Login extends Model {
       if($res->num_rows == 0){
 
           $sql = "INSERT INTO users (email, password, `level`, username, active) VALUES ('$email', '$password', '2', '$username', '1')";
-//          var_dump($sql); die;
           $id = $this->sql($sql);
           if ($id){
               setcookie("user_name", $username);
               setcookie("user_id", $id);
               session_start();
-                  $_SESSION['user_role'] = 2;
-                  $_SESSION['user_id'] =  $this->last_id;
+              $_SESSION['user_role'] = 2;
+              $_SESSION['user_id'] =  $this->last_id;
           }
           return true;
       } else {
@@ -72,9 +72,10 @@ class Model_Login extends Model {
 
   public function check_user_role(){
 
+//      $id = $_COOKIE['user_id'];
       session_start();
 
-      if (isset($_SESSION['user_id'])){
+      if ($_SESSION['user_id']){
           $id = $_SESSION['user_id'];
       } else {
           return false;

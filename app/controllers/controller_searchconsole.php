@@ -1,19 +1,26 @@
 <?php
+
 class Controller_searchconsole extends Controller
 {
   function __construct() {
-    $this->model = new Model_Searchconsole();
-    $this->view = new View();
+      require_once("vendor/autoload.php");
+      $client = new Google_Client();
+      $client->getRefreshToken();
+      $this->model = new Model_Searchconsole($client);
+      $this->view = new View();
   }
 
   function action_index() {
-    require_once("vendor/autoload.php");
-    $data = $this->model->searchconsole();
-    $this->view->generate('search_console.php', 'clean_template_view.php', $data);
+      $res = $this->model->clientinfo();
+      $data = $this->model->searchconsole();
+      $data['inf'] = $res;
+      $results = $this->model->infagency();
+      $data['inform'] = $results;
+      $hash = $this->model->hash();
+      $data['hash'] = $hash;
+          
+      $this->view->generate('search_console.php', 'agency/agency_client_template_view.php', $data);
 
   }
 
-  function action_oauth2callback() {
-
-  }
 }

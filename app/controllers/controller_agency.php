@@ -6,6 +6,18 @@ class Controller_Agency extends Controller
   {
     $this->model = new Model_Agency();
     $this->view = new View();
+
+      /**
+       * Check user role
+       */
+      require_once 'app/models/model_login.php';
+      $user = new Model_Login();
+      $role = $user->check_user_role();
+
+      if ($role['level'] > 3 || $role['level'] < 2){
+          $this->view->generate('danied_view.php', 'template_view.php');
+          die();
+      }
   }
   function action_index() {
     return $this->action_dashboard();
@@ -13,16 +25,16 @@ class Controller_Agency extends Controller
 
   function action_dashboard()
   {
-
     session_start();
     if ($_SESSION['user_role'] == 2) {
-
       $data["title"] = "Dashboard";
       $res = $this->model->prof();
       $result = $this->model->allclient();
+
       $data['all'] = $result;
       $data['prof'] = $res;
-      $this->view->generate('dashboard_admin_view.php', 'template_view.php', $data);
+
+      $this->view->generate('admin/dashboard_admin_view.php', 'agency/agency_template_view.php', $data);
 
     }elseif($_SESSION['user_role'] == 3){
 
@@ -31,16 +43,17 @@ class Controller_Agency extends Controller
       // $result = $this->model->allclient();
       // $data['all'] = $result;
       $data['prof'] = $res;
-      $this->view->generate('dashboard_client_view.php', 'template_view.php', $data);
+      $this->view->generate('dashboard_client_view.php', 'agency/agency_template_view.php', $data);
     
     } else {
       session_destroy();
-      $this->view->generate('danied_view.php', 'template_view.php', '');
+      $this->view->generate('danied_view.php', 'agency/agency_template_view.php');
     }
   }
 
   function action_addclients() 
-  {
+  { 
+    
     $res = $this->model->saveclient();
     if($res != 'Sorry, but the email is not available'){
      echo 'Success';
@@ -55,7 +68,7 @@ class Controller_Agency extends Controller
     $res = $this->model->allclient();
     $data['all'] = $res;
 
-    $this->view->generate('dashboard_clients_view.php', 'template_view.php', $data);
+    $this->view->generate('client/dashboard_clients_view.php', 'agency/agency_template_view.php', $data);
 
 
   }
@@ -89,10 +102,10 @@ class Controller_Agency extends Controller
   {
     $res = $this->model->infagency();
     if($res == 'null'){
-      $this->view->generate('edit_profile_view.php', 'template_view.php', $data);   
+      $this->view->generate('agency/edit_profile_view.php', 'agency/agency_template_view.php', $data);
     }else{
       $data['inf'] = $res;
-      $this->view->generate('profile_view.php', 'template_view.php', $data);   
+      $this->view->generate('agency/agency_profile_view.php', 'agency/agency_template_view.php', $data);
     }
   }
 
@@ -114,22 +127,75 @@ class Controller_Agency extends Controller
 
   }
 
+   
+    public function action_gapi(){
+        require_once dirname(__FILE__).'/../libs/g-api/Api.php';
+        require_once dirname(__FILE__).'/../models/model_api_data.php';
+
+        session_start();
+        $user_id = $_SESSION['user_id'];
+        $api_model = new Model_ApiData();
+
+        $token = $api_model->getAccessToken($user_id);
+        if ($token == false){
+
+            $gapi = new Api();
+            $token = $gapi->access_token;
+            $res = $api_model->saveAccessToken($user_id, 'google_analytics', $token);
+            header('Location: /agency/gapi_get_profiles_list');
+
+        } else {
+
+            $tk = json_decode($token->access_token, true);
+            $gapi = new Api($tk);
+        }
+
+        return $gapi;
+    }
+
+    // http://whiteboard.dev/agency/gapi_get_profiles_list
+
+    public function action_gapi_get_profiles_list(){
+
+        $gapi = $this->action_gapi();
+
+        $profile_list = $gapi->getProfilesList();
+
+                echo '<pre>';
+        var_dump($profile_list);
+        echo '<a href="/agency/clear_session">clear_session</a>';
+
+    }
+
+//    public function action_get_sessions_gapi_analitics($profileId = 90554614){
+//
+//        $results = $this->action_gapi()->getResults($profileId);
+//        if (count($results->getRows()) > 0) {
+//
+//            // Получение имени профиля.
+//            $profileName = $results->getProfileInfo()->getProfileName();
+//
+//            // Получение значения первой записи в первом ряду.
+//            $rows = $results->getRows();
+//            $sessions = $rows[0][0];
+//
+//            // Вывод результатов.
+//            print "Первое найденное представление (профиль): $profileName\n";
+//            print "Всего сеансов: $sessions\n";
+//        } else {
+//            print "Ничего не найдено.\n";
+//        }
+//    }
 
     public function action_clear_session(){
         session_start();
         unset($_SESSION['access_token']);
         header('Location: /agency/gapi');
+
     }
 
     public function action_gapi_auth(){
-//        require_once dirname(__FILE__).'/../libs/g-api/Api.php';
         include dirname(__FILE__).'/../libs/google-api-php-client/gapi.php';
-//        require_once dirname(__FILE__).'/../libs/g-api/test.php';
-//        require_once dirname(__FILE__).'/../models/model_api_data.php';
-//        $api = new Api();
-//        $api->apiAuth();
-//        var_dump($api->client);
-//        echo $api->analytics();
     }
 
 

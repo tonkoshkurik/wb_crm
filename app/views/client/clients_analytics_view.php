@@ -1,138 +1,9 @@
-<style>
-    .Chartjs{
-        margin:10px 0;
-        padding:10px;
-        background: #fff;
-        border:1px solid #d4d2d0;
-        border-radius:10px;
-    }
-</style>
-<body class="nav-md">
-    <div class="container body">
-      <div class="main_container">
-        <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="/agency/dashboard" class="site_title"><i class="fa fa-paw"></i> <span>Jointoit!</span></a>
-            </div>
-
-            <div class="clearfix"></div>
-
-
-
-            <!-- sidebar menu -->
-            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              <div class="menu_section">
-                <h3>General</h3>
-                <ul class="nav side-menu">
-                <!--   <li><a><i class="fa fa-home"></i> Clients <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="#" class="edit-client" data-toggle="modal" class="edit-button" data-target="#client" >Add new clients</a></li>
-                      <li><a href="/agency/allclients">List of clients</a></li>
-                    </ul>
-                  </li> -->
-                  <li><a><i class="fa fa-edit"></i> Setting <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="#">Setting Form 1</a></li>
-                      <li><a href="#">Setting Form 2</a></li>
-                      <li><a href="#">Setting Form 3</a></li>
-                      <li><a href="#">Setting Form 4</a></li>
-                      <li><a href="#">Setting Form 5</a></li>
-                      <!-- <li><a href="form_buttons.html">Form Buttons</a></li> -->
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-desktop"></i> Reports <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="/client/clientanalytics?id=<?=$_GET['id'] ?>">Reports 1</a></li>
-                      <li><a href="/client/clientanalyticspdf?id=<?=$_GET['id'] ?>">Reports 1 PDF</a></li>
-                      <li><a href="#">Reports 3</a></li>
-                      <li><a href="#">Reports 4</a></li>
-                      <li><a href="#">Reports 5</a></li>
-                      <li><a href="#">Reports 6</a></li>
-                      <li><a href="#">Reports 7</a></li>
- <!--                      <li><a href="inbox.html">Inbox</a></li>
-                      <li><a href="calendar.html">Calendar</a></li> -->
-                    </ul>
-                  </li>
-             
-                </ul>
-              </div>
-       
-
-            </div>
-            <!-- /sidebar menu -->
-
-            <!-- /menu footer buttons -->
-            <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
-            </div>
-            <!-- /menu footer buttons -->
-          </div>
-        </div>
-
-        <!-- top navigation -->
-        <div class="top_nav">
-          <div class="nav_menu">
-            <nav>
-              <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-              </div>
-
-              <ul class="nav navbar-nav navbar-right">
-
-                <li class="">
-                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="<?php echo $host.'/'.$data['info']['imglogo']?>" alt=""><?php echo $data['info']['name_agency'];?>
-                    <span class=" fa fa-angle-down"></span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="<?php echo $host.'/agency/infagency'?>"> Profile</a></li>
-                  <!--   <li>
-                      <a href="javascript:;">
-                        <span class="badge bg-red pull-right">50%</span>
-                        <span>Settings</span>
-                      </a>
-                    </li> -->
-                    <!-- <li><a href="javascript:;">Help</a></li> -->
-                    <li><a href="<?php echo $host.'/'.'index/logout'; ?>"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                  </ul>
-                </li>
-
-                <li>
-                    <a href="#" class="edit-client" data-toggle="modal" class="edit-button" data-target="#client" >
-                      <!-- <span class="badge bg-red pull-right">50%</span> -->
-                      <span>Add new client</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?php echo $host.'/'.'agency/dashboard'; ?>">
-                      <!-- <span class="badge bg-red pull-right">50%</span> -->
-                      <span>All clients</span>
-                    </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-        <!-- /top navigation -->
-
-        <!-- page content -->
+<!-- page content -->
 <div class="right_col" role="main">
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row main-analytics-row">
+        <div class="col-md-12 analytics-all-container">
             <form action="" method="post" id="form">
-                <input type="hidden" name="client_id" placeholder="client_id" id="client_id" value="<?=$_GET['id'] ?>">
+                <input type="hidden" name="client_id" placeholder="client_id" id="client_id" value="<?=$_SESSION['client_id'] ?>">
                 <input type="hidden" name="api_name" placeholder="api_name" id="api_name" value="api_analitics">
             </form>
 
@@ -145,103 +16,58 @@
                 }(window,document,'script'));
             </script>
 
-            <ul class="nav nav-tabs">
-                <li class="active"><a data-toggle="tab" href="#general">Client Analytics - General</a></li>
-                <li><a data-toggle="tab" href="#channels" id="li-channels">Channels</a></li>
-                <li><a data-toggle="tab" href="#audience">Audience</a></li>
-            </ul>
+            <h2>Client Analytics - General</h2>
 
-            <div class="tab-content">
-                <div id="general" class="tab-pane fade in active">
-                    <h2>Client Analytics - General</h2>
+            <header>
+                <div id="embed-api-auth-container"></div>
+                <div id="view-selector-container" style="display:none;"></div>
+                <div id="view-name"></div>
+                <div id="active-users-container"></div>
+            </header>
 
-                    <header>
-                        <div id="embed-api-auth-container"></div>
-                        <div id="view-selector-container" style="display:none;"></div>
-                        <div id="view-name"></div>
-                        <div id="active-users-container"></div>
-                    </header>
-
-                    <div id="chart-container">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="Chartjs">
-                                    <h3>This Week vs Last Week (by sessions)</h3>
-                                    <figure class="Chartjs-figure" id="chart-1-container"></figure>
-                                    <ol class="Chartjs-legend" id="legend-1-container"></ol>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="Chartjs">
-                                    <h3>This Year vs Last Year (by users)</h3>
-                                    <figure class="Chartjs-figure" id="chart-2-container"></figure>
-                                    <ol class="Chartjs-legend" id="legend-2-container"></ol>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="Chartjs">
-                                    <h3>Top Browsers (by pageview)</h3>
-                                    <figure class="Chartjs-figure" id="chart-3-container"></figure>
-                                    <ol class="Chartjs-legend" id="legend-3-container"></ol>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="Chartjs">
-                                    <h3>Top Countries (by sessions)</h3>
-                                    <figure class="Chartjs-figure" id="chart-4-container"></figure>
-                                    <ol class="Chartjs-legend" id="legend-4-container"></ol>
-                                </div>
-                            </div>
+            <div id="chart-container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="Chartjs">
+                            <h3>Users</h3>
+                            <figure class="Chartjs-figure" id="chart-5-container"></figure>
+                            <ol class="Chartjs-legend" id="legend-5-container"></ol>
                         </div>
                     </div>
                 </div>
-
-                <div id="channels" class="tab-pane fade">
-                    <h2>Client Analytics - Channels</h2>
-                    <div id="chart-container-2">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="Chartjs">
-                                    <h3>Sessions</h3>
-                                    <figure class="Chartjs-figure" id="chart-5-container"></figure>
-                                    <ol class="Chartjs-legend" id="legend-5-container"></ol>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="Chartjs">
-                                    <h3>Channels</h3>
-                                    <figure class="Chartjs-figure" id="chart-6-container"></figure>
-                                    <ol class="Chartjs-legend" id="legend-6-container"></ol>
-                                </div>
-                            </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="Chartjs">
+                            <h3>This Week vs Last Week (by sessions)</h3>
+                            <figure class="Chartjs-figure" id="chart-1-container"></figure>
+                            <ol class="Chartjs-legend" id="legend-1-container"></ol>
                         </div>
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="Chartjs">
-                                    <h3>Channels</h3>
-                                    <figure class="Chartjs-figure" id="chart-7-container"></figure>
-                                    <ol class="Chartjs-legend" id="legend-7-container"></ol>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="Chartjs">
-                                    <h3>Sessions</h3>
-                                    <figure class="Chartjs-figure" id="chart-8-container"></figure>
-                                    <ol class="Chartjs-legend" id="legend-8-container"></ol>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="Chartjs">
+                            <h3>This Year vs Last Year (by users)</h3>
+                            <figure class="Chartjs-figure" id="chart-2-container"></figure>
+                            <ol class="Chartjs-legend" id="legend-2-container"></ol>
                         </div>
                     </div>
                 </div>
-
-                <div id="audience" class="tab-pane fade">
-                    <h2>Client Analytics - Audience</h2>
-                    <!-- Some Chars here-->
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="Chartjs">
+                            <h3>Top Browsers (by pageview)</h3>
+                            <figure class="Chartjs-figure" id="chart-3-container"></figure>
+                            <ol class="Chartjs-legend" id="legend-3-container"></ol>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="Chartjs">
+                            <h3>Top Countries (by sessions)</h3>
+                            <figure class="Chartjs-figure" id="chart-4-container"></figure>
+                            <ol class="Chartjs-legend" id="legend-4-container"></ol>
+                        </div>
+                    </div>
                 </div>
             </div>
-
 
             <!-- Include the ActiveUsers component script. -->
             <script src="<?=__HOST__?>/js/embed-api/components/active-users.js"></script>
@@ -308,15 +134,18 @@
                         data: {val: $('#form').serialize() }
                     }).done(function( msg ) {
                         var data = $.parseJSON(msg);
+                        console.log(data);
+                        if (data == null){
+                            $('.analytics-all-container').hide();
+                            $('.main-analytics-row').append('<h2>Integration is not set!</h2><p>Please, go to clients integration to connect Google Analytics.</p><a class="btn btn-primary" href="/client/clientinfo">Set integrations</a>')
+                        }
                         $('#api_profile_id').val(data.api_profile_id);
                         $('#api_name').val(data.api_name);
                         $('#client_id').val(data.client_id);
-                        console.log(data);
+
 
                         function escapeHtml(text) {
-                            return text
-                                .replace("%3A", ":");
-
+                            return text.replace("%3A", ":");
                         }
 
                         /**
@@ -347,13 +176,7 @@
                             renderYearOverYearChart(data.ids);
                             renderTopBrowsersChart(data.ids);
                             renderTopCountriesChart(data.ids);
-
-                            // Tab 2 click
-                            $('#li-channels').on('click', function(){
-                                chart5(data.ids);
-                                chart6(data.ids);
-                            });
-
+                            chart5(data.ids);
                         });
                     });
 
@@ -369,10 +192,9 @@
                             'ids': ids,
                             'dimensions': 'ga:date,ga:nthDay',
                             'metrics': 'ga:sessions',
-                            'start-date': moment(now).subtract(1, 'day').day(0).format('YYYY-MM-DD'),
-                            'end-date': moment(now).format('YYYY-MM-DD')
+                            'start-date': '2017-01-01',
+                            'end-date': '2017-01-30'
                         });
-
                         var lastWeek = query({
                             'ids': ids,
                             'dimensions': 'ga:date,ga:nthDay',
@@ -554,15 +376,15 @@
                         var thisWeek = query({
                             'ids': ids,
                             'dimensions': 'ga:Date',
-                            'metrics': 'ga:sessions',
+                            'metrics': 'ga:pageviewsPerSession',
                             'start-date': moment(now).subtract(1, 'day').day(0).format('YYYY-MM-DD'),
                             'end-date': moment(now).format('YYYY-MM-DD')
                         });
 
                         var lastMonth = query({
                             'ids': ids,
-                            'dimensions': 'ga:Date,ga:Date',
-                            'metrics': 'ga:sessions',
+                            'dimensions': 'ga:date,ga:nthDay',
+                            'metrics': 'ga:users',
                             'start-date': moment(now).subtract(1, 'day').day(0).subtract(1, 'month').format('YYYY-MM-DD'),
                             'end-date': moment(now).subtract(1, 'day').day(30).subtract(1, 'month').format('YYYY-MM-DD')
                         });
@@ -582,45 +404,19 @@
                                     {
                                         label: 'Last Month',
                                         fillColor : 'rgba(220,220,220,0.5)',
-                                        strokeColor : 'rgba(220,220,220,1)',
-                                        pointColor : 'rgba(220,220,220,1)',
-                                        pointStrokeColor : '#fff',
+                                        strokeColor : 'rgba(95,184,220,1)',
+                                        pointColor : 'rgba(95,184,220,1)',
+                                        pointStrokeColor : '#5fb8ff',
                                         data : data2
                                     },
 
                                 ]
                             };
 
-                            new Chart(makeCanvas('chart-5-container')).Bar(data);
+                            new Chart(makeCanvas('chart-5-container')).Line(data);
                             generateLegend('legend-5-container', data.datasets);
                         });
                     }
-
-                    /**
-                     * Chart 6
-                     */
-                    function chart6(ids) {
-
-                        query({
-                            'ids': ids,
-                            'dimensions': 'ga:source',
-                            'metrics': 'ga:organicSearches',
-                            'max-results': 5
-                        })
-                            .then(function(response) {
-
-                                var data = [];
-                                var colors = ['#4D5360','#949FB1','#D4CCC5','#E2EAE9','#F7464A'];
-
-                                response.rows.forEach(function(row, i) {
-                                    data.push({ value: +row[1], color: colors[i], label: row[0] });
-                                });
-
-                                new Chart(makeCanvas('chart-6-container')).Doughnut(data);
-                                generateLegend('legend-6-container', data);
-                            });
-                    }
-
 
                     /**
                      * Extend the Embed APIs `gapi.analytics.report.Data` component to

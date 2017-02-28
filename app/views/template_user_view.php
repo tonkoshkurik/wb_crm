@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Infintech Designs</title>
+  <title><?php echo _FIRST_TITLE_ . ' | ' . _MAIN_TITLE_ ?></title>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <meta charset="UTF-8">
   <meta name="description" content="" />

@@ -31,8 +31,7 @@ class Api
 
     public function apiAuth(){
         session_start();
-
-        $this->client->setAuthConfig(__DIR__ . '/client_secret_201890636942-vr0pgotfrschlt1p8o5q9v3u9bqhnmdu.apps.googleusercontent.com.json');
+        $this->client->setAuthConfig( _MAIN_DOC_ROOT_ . '/credentials/oauth-credentials.json');
         $this->client->setRedirectUri($this->redirect_uri);
         $this->client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);
 

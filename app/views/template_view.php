@@ -7,11 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Simon project | </title>
+    <title><?php echo _FIRST_TITLE_ . ' | ' . _MAIN_TITLE_ ?></title>
     <?php
       $host = 'http://' . $_SERVER['HTTP_HOST']; // для правильной подгрузки стилей и скриптов
     ?> 
-    <link href="<?php echo $host; ?>/assets/css/custom.css" rel="stylesheet">
     <!-- Bootstrap -->
     <link href="../vendors/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -29,6 +28,8 @@
 
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.min.css" rel="stylesheet">
+    <link href="<?php echo $host; ?>/assets/css/custom.css" rel="stylesheet">
+
   </head>
 
  <?php include 'app/views/'.$content_view; ?>

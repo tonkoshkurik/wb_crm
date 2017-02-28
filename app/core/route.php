@@ -19,8 +19,7 @@ class Route
 		if ( !empty($routes[2]) )
 		{
 			$action_name = explode('?', $routes[2]);
-      $action_name = $action_name[0];
-//      $controller_name = $action_name;
+      	$action_name = $action_name[0];
 //		var_dump($action_name);
 //		exit();
 		}

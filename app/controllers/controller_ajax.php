@@ -13,6 +13,12 @@ class Controller_Ajax extends Controller
         $this->model = new Model_Ajax();
         $this->view = new View();
     }
+
+    public function action_index()
+    {
+       echo $this->model->get_post();
+    }
+
     public function action_add_api_profile(){
         echo $this->model->add_api_profile_id();
     }
@@ -46,5 +52,37 @@ class Controller_Ajax extends Controller
     public function action_gmetrix_account_save(){
         print_r( $this->model->gmetrix_account_save());
 //        echo $this->model->gmetrix_account_save();
+    }
+
+    public function action_gmetrix_start_test(){
+
+        require_once 'app/models/model_gmetrix.php';
+        $gmetrix = new Model_Gmetrix();
+        if (!$gmetrix->api_key || !$gmetrix->account_email){
+            echo json_encode('error');
+            die();
+        }
+        if (!$url = $this->model->get_post()['gmetrix_url']){
+            echo json_encode('error');
+            die();
+        }
+        $gmetrix->url_to_test = $url;
+        $gmetrix->test_id();
+        if (!$gmetrix->testid){
+//            echo json_encode('no test id');
+            echo json_encode($gmetrix->errors);
+            die();
+        }
+        $results= $gmetrix->run();
+
+        if ($results){
+            echo json_encode($results);
+//            echo json_encode($gmetrix->data);
+            die();
+        } else {
+            echo json_encode($gmetrix->errors);
+            die();
+        }
+
     }
 }

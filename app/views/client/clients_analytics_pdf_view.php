@@ -1,134 +1,4 @@
-<style>
-    .Chartjs{
-        margin:10px 0;
-        padding:10px;
-        background: #fff;
-        border:1px solid #d4d2d0;
-        border-radius:10px;
-    }
-</style>
-
-<body class="nav-md">
-    <div class="container body">
-      <div class="main_container">
-        <div class="col-md-3 left_col">
-          <div class="left_col scroll-view">
-            <div class="navbar nav_title" style="border: 0;">
-              <a href="/agency/dashboard" class="site_title"><i class="fa fa-paw"></i> <span>Jointoit!</span></a>
-            </div>
-
-            <div class="clearfix"></div>
-
-
-
-            <!-- sidebar menu -->
-            <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
-              <div class="menu_section">
-                <h3>General</h3>
-                <ul class="nav side-menu">
-                <!--   <li><a><i class="fa fa-home"></i> Clients <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="#" class="edit-client" data-toggle="modal" class="edit-button" data-target="#client" >Add new clients</a></li>
-                      <li><a href="/agency/allclients">List of clients</a></li>
-                    </ul>
-                  </li> -->
-                  <li><a><i class="fa fa-edit"></i> Setting <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="#">Setting Form 1</a></li>
-                      <li><a href="#">Setting Form 2</a></li>
-                      <li><a href="#">Setting Form 3</a></li>
-                      <li><a href="#">Setting Form 4</a></li>
-                      <li><a href="#">Setting Form 5</a></li>
-                      <!-- <li><a href="form_buttons.html">Form Buttons</a></li> -->
-                    </ul>
-                  </li>
-                  <li><a><i class="fa fa-desktop"></i> Reports <span class="fa fa-chevron-down"></span></a>
-                    <ul class="nav child_menu">
-                      <li><a href="/client/clientanalytics?id=<?=$_GET['id'] ?>">Reports 1</a></li>
-                      <li><a href="/client/clientanalyticspdf?id=<?=$_GET['id'] ?>">Reports 1 PDF</a></li>
-                      <li><a href="#">Reports 3</a></li>
-                      <li><a href="#">Reports 4</a></li>
-                      <li><a href="#">Reports 5</a></li>
-                      <li><a href="#">Reports 6</a></li>
-                      <li><a href="#">Reports 7</a></li>
- <!--                      <li><a href="inbox.html">Inbox</a></li>
-                      <li><a href="calendar.html">Calendar</a></li> -->
-                    </ul>
-                  </li>
-             
-                </ul>
-              </div>
-       
-
-            </div>
-            <!-- /sidebar menu -->
-
-            <!-- /menu footer buttons -->
-            <div class="sidebar-footer hidden-small">
-              <a data-toggle="tooltip" data-placement="top" title="Settings">
-                <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="FullScreen">
-                <span class="glyphicon glyphicon-fullscreen" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Lock">
-                <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </a>
-              <a data-toggle="tooltip" data-placement="top" title="Logout">
-                <span class="glyphicon glyphicon-off" aria-hidden="true"></span>
-              </a>
-            </div>
-            <!-- /menu footer buttons -->
-          </div>
-        </div>
-
-        <!-- top navigation -->
-        <div class="top_nav">
-          <div class="nav_menu">
-            <nav>
-              <div class="nav toggle">
-                <a id="menu_toggle"><i class="fa fa-bars"></i></a>
-              </div>
-
-              <ul class="nav navbar-nav navbar-right">
-
-                <li class="">
-                  <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="<?php echo $host.'/'.$data['info']['imglogo']?>" alt=""><?php echo $data['info']['name_agency'];?>
-                    <span class=" fa fa-angle-down"></span>
-                  </a>
-                  <ul class="dropdown-menu dropdown-usermenu pull-right">
-                    <li><a href="<?php echo $host.'/agency/infagency'?>"> Profile</a></li>
-                  <!--   <li>
-                      <a href="javascript:;">
-                        <span class="badge bg-red pull-right">50%</span>
-                        <span>Settings</span>
-                      </a>
-                    </li> -->
-                    <!-- <li><a href="javascript:;">Help</a></li> -->
-                    <li><a href="<?php echo $host.'/'.'index/logout'; ?>"><i class="fa fa-sign-out pull-right"></i> Log Out</a></li>
-                  </ul>
-                </li>
-
-                <li>
-                    <a href="#" class="edit-client" data-toggle="modal" class="edit-button" data-target="#client" >
-                      <!-- <span class="badge bg-red pull-right">50%</span> -->
-                      <span>Add new client</span>
-                    </a>
-                </li>
-                <li>
-                    <a href="<?php echo $host.'/'.'agency/dashboard'; ?>">
-                      <!-- <span class="badge bg-red pull-right">50%</span> -->
-                      <span>All clients</span>
-                    </a>
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </div>
-        <!-- /top navigation -->
-
-        <!-- page content -->
+<!-- page content -->
 <div class="right_col" role="main">
     <div class="row">
         <div class="col-xs-6"><h1>Client Analytics</h1></div>
@@ -171,12 +41,12 @@
                         <span><h3>Google analytics report</h3></span>
                         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
 
-                            <img src="<?=__HOST__.'/'.$data['client_info']['img']?>" alt="" height="90px">
+                            <img src="<?=__HOST__.'/'.$data['info']['imglogo']?>" alt="" height="90px">
                         </div>
                         <div class="col-md-6 col-lg-6 col-sm-6 col-xs-6">
                         <span style="float: right">
                                 <span><?=$data['client_info']['name']?></span><br>
-                            <span id="client-email"><?=$data['client_info']['email']?></span>
+                            <span id="client-email"><?=$data['info']['email']?></span>
                             </span>
                         </div>
                     </div>

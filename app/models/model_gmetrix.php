@@ -19,9 +19,15 @@ class Model_Gmetrix extends Model
     public $data;
 
     public function __construct(){
+        set_time_limit(0);
+        ini_set('max_execution_time', 0);
         $this->set_current_user();
         require_once str_replace('\\', '/', _MAIN_DOC_ROOT_.'/app/libs/Service_WTF_Test.php');
-        session_start();
+
+        if (!session_id()){
+            session_start();
+        }
+
         $this->user_id = $_SESSION['user_id'];
 
         $this->account_email = $this->get_account_email($this->user_id);
@@ -29,7 +35,10 @@ class Model_Gmetrix extends Model
 
         if ($this->account_email && $this->api_key){
             $this->gmetrix = new Services_WTF_Test($this->account_email, $this->api_key);
+        } else {
+            $this->gmetrix = new Services_WTF_Test('mattgs618@gmail.com', '9c50059c1607dd309078a74ba7a78db9');
         }
+
     }
 
     public function remove_saved_test($id){
@@ -173,7 +182,7 @@ class Model_Gmetrix extends Model
     private function get_account_email($user_id){
         $sql = "SELECT account_email FROM `gmetrix_api` WHERE user_id = '$user_id' LIMIT 1";
         $res = $this->sql($sql);
-        if ($res){
+        if ($res->num_rows >0){
             $key = $res->fetch_assoc();
             $result = '';
             foreach ($key as $email){
@@ -188,7 +197,7 @@ class Model_Gmetrix extends Model
     private function get_api_key($user_id){
         $sql = "SELECT api_key FROM `gmetrix_api` WHERE user_id = '$user_id' LIMIT 1";
         $res = $this->sql($sql);
-        if ($res){
+        if ($res->num_rows >0){
             $key = $res->fetch_assoc();
             $result = '';
             foreach ($key as $api_key){
@@ -208,7 +217,9 @@ class Model_Gmetrix extends Model
      *
      */
     public function set_current_user(){
-        session_start();
+        if (!session_id()){
+            session_start();
+        }
         $this->current_user_id = $_SESSION['user_id'];
     }
 

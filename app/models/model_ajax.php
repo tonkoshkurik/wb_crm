@@ -15,6 +15,10 @@ class Model_Ajax extends Model
         $this->set_current_user();
 
     }
+    
+    public function gmetrix_start_test(){
+        
+    }
 
     public function gmetrix_account_update($user_id){
         $data = $this->get_post();
@@ -195,11 +199,14 @@ class Model_Ajax extends Model
         if (!is_string($_POST['val'])){
            return 'val was not serialize to string';
         }
+
         $post = explode('&', $_POST['val']);
+
         $data = array();
         foreach ($post as $value){
+
             $array =  explode('=', $value);
-            $data[$array[0]] = $array[1];
+            $data[urlencode($array[0])] = urldecode($array[1]);
         }
         return $data;
     }
